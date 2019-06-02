@@ -40,6 +40,4 @@ public interface CowCounterConfig extends Config {
             position = 4
     )
     default Color cowHighlightColor() {return Color.yellow;}
-
-
 }

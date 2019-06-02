@@ -6,9 +6,12 @@ import javax.inject.Inject;
 
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
+import net.runelite.api.Perspective;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.OverlayUtil;
 
 
 public class CowCounterOverlay extends Overlay {
@@ -36,10 +39,29 @@ public class CowCounterOverlay extends Overlay {
         List<NPC> targets = plugin.getCowList();
         for (NPC target : targets)
         {
-            renderTargetOverlay(graphics, target, config.cowHighlightColor());
+            renderTargetOverlay(graphics, target, config.cowHighlightColor());//highlights hull
+            renderTile(graphics, target.getLocalLocation(), config.cowHighlightColor());//highlights tiles
+
         }
 
         return null;
+    }
+
+    private void renderTile(final Graphics2D graphics, final LocalPoint dest, final Color color)
+    {
+        if (dest == null)
+        {
+            return;
+        }
+
+        final Polygon poly = Perspective.getCanvasTilePoly(client, dest);
+
+        if (poly == null)
+        {
+            return;
+        }
+
+        OverlayUtil.renderPolygon(graphics, poly, color);
     }
 
     private void renderTargetOverlay(Graphics2D graphics, NPC actor, Color color)

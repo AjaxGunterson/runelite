@@ -77,6 +77,7 @@ public class CowCounterPlugin extends Plugin {
         switch (event.getGameState())
         {
             case HOPPING:
+                cowList.clear();
             case LOGGING_IN:
                 cowList.clear();
             case LOGGED_IN:
@@ -181,10 +182,10 @@ public class CowCounterPlugin extends Plugin {
             } else {
                 //disable cow highlighting
                 overlayManager.remove(overlay);
+                //cowList.clear();
             }
+
         }
-
-
     }
 
     public List<NPC> getCowList(){
