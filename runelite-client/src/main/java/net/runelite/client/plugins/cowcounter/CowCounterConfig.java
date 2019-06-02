@@ -40,4 +40,12 @@ public interface CowCounterConfig extends Config {
             position = 4
     )
     default Color cowHighlightColor() {return Color.yellow;}
+
+    @ConfigItem(
+            keyName = "tileYes",
+            name = "",
+            description = "",
+            position = 5
+    )
+    default boolean tileYes() {return true;}
 }
