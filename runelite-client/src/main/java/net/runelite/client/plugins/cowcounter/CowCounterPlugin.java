@@ -182,9 +182,7 @@ public class CowCounterPlugin extends Plugin {
             } else {
                 //disable cow highlighting
                 overlayManager.remove(overlay);
-                //cowList.clear();
             }
-
         }
     }
 
