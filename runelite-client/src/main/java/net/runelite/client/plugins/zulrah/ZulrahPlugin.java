@@ -2,12 +2,13 @@ package net.runelite.client.plugins.zulrah;
 
 import com.google.inject.Inject;
 import com.google.inject.Provides;
-import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
-import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.*;
+import net.runelite.api.events.ConfigChanged;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.NpcDespawned;
+import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -15,14 +16,10 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 
-import java.sql.Struct;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import static net.runelite.api.NpcID.*;
-import static net.runelite.client.plugins.zulrah.ZulrahPhase.*;
 
 @PluginDescriptor(
         name = "Zulrah",
@@ -51,16 +48,9 @@ public class ZulrahPlugin extends Plugin {
     @Inject
     private ZulrahTileOverlay zulrahTileOverlay;
 
-    private ZulrahPhase phase;
-
-    final int ZULRAH_EMERGE_INITIAL = 5071,
-                ZULRAH_EMERGE = 5073;
-
-    int phaseCounter = 0;
     NPC zulrahNpc = null;
     List<WorldPoint> safeSpots = new ArrayList<>(),
                 nextSafeSpots = new ArrayList<>();
-    List<ZulrahPhase> phaseList = new ArrayList<>();
 
     @Provides
     ZulrahConfig provideConfig(ConfigManager configManager)
@@ -91,14 +81,8 @@ public class ZulrahPlugin extends Plugin {
         if (!isZulrah(event.getNpc())){
             return;
         }
-        System.out.println("Number of phases: " + phaseCounter);
-        phaseCounter = 0;
         System.out.println("Zulrah has despawned!");
-        for(ZulrahPhase phase : phaseList){
-            System.out.println(phase.getNpcId());
-        }
     }
-
 
     @Subscribe
     public void onNpcSpawned(NpcSpawned event){
@@ -111,47 +95,6 @@ public class ZulrahPlugin extends Plugin {
         System.out.println("Zulrah has spawned!");
 
         zulrahNpc = event.getNpc();
-    }
-
-    @Subscribe
-    public void onAnimationChanged(AnimationChanged event){
-        if (!config.tileYes()){return;}
-
-        Actor npc = event.getActor();
-
-        if (npc.getName() == null){return;}
-
-        if (!(npc.getName().equals("Zulrah"))){return;}
-
-        if (npc.getAnimation() == ZULRAH_EMERGE || npc.getAnimation() == ZULRAH_EMERGE_INITIAL){
-            transformationTracker();
-            System.out.println("Zulrah has transformed!");
-        }
-
-    }
-
-    private void transformationTracker(){
-        phaseCounter++;
-        ZulrahPhase currentPhase = phase.RANGE;
-
-        for (NPC newZulrah : client.getNpcs()){
-            switch(newZulrah.getId()){
-                case ZULRAH://RANGE
-                    currentPhase = phase.RANGE;
-                    zulrahNpc = newZulrah;
-                    break;
-                case ZULRAH_2043://MELEE
-                    currentPhase = phase.MELEE;
-                    zulrahNpc = newZulrah;
-                    break;
-                case ZULRAH_2044://MAGE
-                    currentPhase = MAGE;
-                    zulrahNpc = newZulrah;
-                    break;
-            }
-        }
-
-        phaseList.add(currentPhase);
     }
 
     @Subscribe
