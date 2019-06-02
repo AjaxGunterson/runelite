@@ -24,7 +24,7 @@ import static net.runelite.api.NpcID.*;
         name = "Cow Counter",
         description = "There is no cow level.",
         tags = {"cow", "tracker"},
-        enabledByDefault = true
+        enabledByDefault = false
 )
 
 public class CowCounterPlugin extends Plugin {
