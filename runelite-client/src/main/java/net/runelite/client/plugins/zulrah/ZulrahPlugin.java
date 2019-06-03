@@ -80,7 +80,11 @@ public class ZulrahPlugin extends Plugin {
         switch (event.getGameState())
         {
             case HOPPING:
+                zulrahNpc = null;
+                break;
             case LOGGING_IN:
+                zulrahNpc = null;
+                break;
             case LOGGED_IN:
                 break;
         }
@@ -132,20 +136,20 @@ public class ZulrahPlugin extends Plugin {
 
     private void transformationTracker(){
         phaseCounter++;
-        ZulrahPhase currentPhase = phase.RANGE;
+        ZulrahPhase currentPhase = phase.RANGE_CENTER;
 
         for (NPC newZulrah : client.getNpcs()){
             switch(newZulrah.getId()){
                 case ZULRAH://RANGE
-                    currentPhase = phase.RANGE;
+                    //currentPhase = phase.RANGE;
                     zulrahNpc = newZulrah;
                     break;
                 case ZULRAH_2043://MELEE
-                    currentPhase = phase.MELEE;
+                    //currentPhase = phase.MELEE;
                     zulrahNpc = newZulrah;
                     break;
                 case ZULRAH_2044://MAGE
-                    currentPhase = MAGE;
+                    //currentPhase = MAGE;
                     zulrahNpc = newZulrah;
                     break;
             }
