@@ -5,17 +5,30 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.NpcID;
 import net.runelite.api.Skill;
+import net.runelite.api.coords.WorldPoint;
+
+
 
 @Getter
 @RequiredArgsConstructor
 public enum ZulrahPhase {
 
+    RANGE_CENTER(NpcID.ZULRAH, ZulrahPosition.CENTER),
+    RANGE_EAST(NpcID.ZULRAH, ZulrahPosition.EAST),
+    RANGE_SOUTH(NpcID.ZULRAH, ZulrahPosition.SOUTH),
+    RANGE_WEST(NpcID.ZULRAH, ZulrahPosition.WEST),
 
-    RANGE(NpcID.ZULRAH, Skill.RANGED),
-    MELEE(NpcID.ZULRAH_2043, Skill.ATTACK),
-    MAGE(NpcID.ZULRAH_2044, Skill.MAGIC);
+    MELEE_CENTER(NpcID.ZULRAH_2043, ZulrahPosition.CENTER),
+    MELEE_EAST(NpcID.ZULRAH_2043, ZulrahPosition.EAST),
+    MELEE_SOUTH(NpcID.ZULRAH_2043, ZulrahPosition.SOUTH),
+    MELEE_WEST(NpcID.ZULRAH_2043, ZulrahPosition.WEST),
+
+    MAGE_CENTER(NpcID.ZULRAH_2044, ZulrahPosition.CENTER),
+    MAGE_EAST(NpcID.ZULRAH_2044, ZulrahPosition.EAST),
+    MAGE_SOUTH(NpcID.ZULRAH_2044, ZulrahPosition.SOUTH),
+    MAGE_WEST(NpcID.ZULRAH_2044, ZulrahPosition.WEST);
 
     private final int npcId;
-    private final Skill type;
+    private final ZulrahPosition position;
 
 }
