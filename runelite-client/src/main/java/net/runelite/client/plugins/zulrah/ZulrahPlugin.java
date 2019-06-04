@@ -5,7 +5,7 @@ import com.google.inject.Provides;
 import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
-import net.runelite.api.Skill;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
@@ -15,14 +15,12 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 
-import java.sql.Struct;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import static net.runelite.api.NpcID.*;
 import static net.runelite.client.plugins.zulrah.ZulrahPhase.*;
+import static net.runelite.client.plugins.zulrah.ZulrahPosition.*;
 
 @PluginDescriptor(
         name = "Zulrah",
@@ -53,8 +51,11 @@ public class ZulrahPlugin extends Plugin {
 
     private ZulrahPhase phase;
 
+    private ZulrahPosition position;
+
     final int ZULRAH_EMERGE_INITIAL = 5071,
                 ZULRAH_EMERGE = 5073;
+
 
     int phaseCounter = 0;
     NPC zulrahNpc = null;
@@ -99,7 +100,9 @@ public class ZulrahPlugin extends Plugin {
         phaseCounter = 0;
         System.out.println("Zulrah has despawned!");
         for(ZulrahPhase phase : phaseList){
-            System.out.println(phase.getNpcId());
+            System.out.print(phase.getNpcId());
+            System.out.println(": " + phase.getPosition());
+
         }
     }
 
@@ -136,25 +139,55 @@ public class ZulrahPlugin extends Plugin {
 
     private void transformationTracker(){
         phaseCounter++;
-        ZulrahPhase currentPhase = phase.RANGE_CENTER;
+        ZulrahPhase currentPhase = phase.MAGE_SOUTH;
+        LocalPoint zulrahLocation;
 
         for (NPC newZulrah : client.getNpcs()){
+
             switch(newZulrah.getId()){
                 case ZULRAH://RANGE
-                    //currentPhase = phase.RANGE;
+
                     zulrahNpc = newZulrah;
+                    zulrahLocation = newZulrah.getLocalLocation();
+
+                    if (zulrahLocation.equals(CENTER.getPosition())){
+                        currentPhase = phase.RANGE_CENTER;
+                    } else if (zulrahLocation.equals(EAST.getPosition())){
+                        currentPhase = phase.RANGE_EAST;
+                    } else if (zulrahLocation.equals(SOUTH.getPosition())){
+                        currentPhase = phase.RANGE_SOUTH;
+                    } else if (zulrahLocation.equals(WEST.getPosition())){
+                        currentPhase = phase.RANGE_WEST;
+                    }
                     break;
                 case ZULRAH_2043://MELEE
-                    //currentPhase = phase.MELEE;
                     zulrahNpc = newZulrah;
+                    zulrahLocation = newZulrah.getLocalLocation();
+                    if (zulrahLocation.equals(CENTER.getPosition())){
+                        currentPhase = phase.MELEE_CENTER;
+                    } else if (zulrahLocation.equals(EAST.getPosition())){
+                        currentPhase = phase.MELEE_EAST;
+                    } else if (zulrahLocation.equals(SOUTH.getPosition())){
+                        currentPhase = phase.MELEE_SOUTH;
+                    } else if (zulrahLocation.equals(WEST.getPosition())){
+                        currentPhase = phase.MELEE_WEST;
+                    }
                     break;
                 case ZULRAH_2044://MAGE
-                    //currentPhase = MAGE;
                     zulrahNpc = newZulrah;
+                    zulrahLocation = newZulrah.getLocalLocation();
+                    if (zulrahLocation.equals(CENTER.getPosition())){
+                        currentPhase = phase.MAGE_CENTER;
+                    } else if (zulrahLocation.equals(EAST.getPosition())){
+                        currentPhase = phase.MAGE_EAST;
+                    } else if (zulrahLocation.equals(SOUTH.getPosition())){
+                        currentPhase = phase.MAGE_SOUTH;
+                    } else if (zulrahLocation.equals(WEST.getPosition())){
+                        currentPhase = phase.MAGE_WEST;
+                    }
                     break;
             }
         }
-
         phaseList.add(currentPhase);
     }
 

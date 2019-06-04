@@ -4,10 +4,6 @@ package net.runelite.client.plugins.zulrah;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.NpcID;
-import net.runelite.api.Skill;
-import net.runelite.api.coords.WorldPoint;
-
-
 
 @Getter
 @RequiredArgsConstructor
