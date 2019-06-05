@@ -16,13 +16,11 @@ import static net.runelite.api.NpcID.*;
 
 public class ZulrahOverlay extends Overlay {
     private final Client client;
-    private final ZulrahConfig config;
     private final ZulrahPlugin plugin;
 
     @Inject
-    private ZulrahOverlay(Client client, ZulrahConfig config, ZulrahPlugin plugin) {
+    private ZulrahOverlay(Client client, ZulrahPlugin plugin) {
         this.client = client;
-        this.config = config;
         this.plugin = plugin;
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
@@ -31,10 +29,6 @@ public class ZulrahOverlay extends Overlay {
     @Override
     public Dimension render(Graphics2D graphics)
     {
-        if (!config.tileYes())
-        {
-            return null;
-        }
 
         NPC zulrah = plugin.zulrahNpc;
 

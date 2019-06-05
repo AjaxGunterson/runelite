@@ -19,13 +19,11 @@ import static net.runelite.api.NpcID.*;
 
 public class ZulrahTileOverlay extends Overlay {
     private final Client client;
-    private final ZulrahConfig config;
     private final ZulrahPlugin plugin;
 
     @Inject
-    private ZulrahTileOverlay(Client client, ZulrahConfig config, ZulrahPlugin plugin) {
+    private ZulrahTileOverlay(Client client, ZulrahPlugin plugin) {
         this.client = client;
-        this.config = config;
         this.plugin = plugin;
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
@@ -34,10 +32,6 @@ public class ZulrahTileOverlay extends Overlay {
     @Override
     public Dimension render(Graphics2D graphics)
     {
-        if (!config.tileYes())
-        {
-            return null;
-        }
 
         NPC zulrah = plugin.zulrahNpc;
         List<WorldPoint> safeSpots = plugin.getSafeSpots(),
