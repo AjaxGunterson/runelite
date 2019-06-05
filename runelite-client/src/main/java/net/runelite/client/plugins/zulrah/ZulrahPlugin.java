@@ -33,9 +33,6 @@ import static net.runelite.client.plugins.zulrah.ZulrahPosition.*;
 public class ZulrahPlugin extends Plugin {
 
     @Inject
-    private ZulrahConfig config;
-
-    @Inject
     private Client client;
 
     @Inject
@@ -65,12 +62,6 @@ public class ZulrahPlugin extends Plugin {
     List<ZulrahPhase> phaseList = new ArrayList<>();
     ZulrahPatterns pattern = null; //undecided pattern
     List<ZulrahPatterns> possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4);
-
-    @Provides
-    ZulrahConfig provideConfig(ConfigManager configManager)
-    {
-        return configManager.getConfig(ZulrahConfig.class);
-    }
 
     @Override
     protected void startUp(){
@@ -107,7 +98,6 @@ public class ZulrahPlugin extends Plugin {
 
     @Subscribe
     public void onNpcSpawned(NpcSpawned event){
-        if (!config.tileYes()){return;}
 
         if (!isZulrah(event.getNpc())){
             return;
@@ -118,7 +108,6 @@ public class ZulrahPlugin extends Plugin {
 
     @Subscribe
     public void onAnimationChanged(AnimationChanged event){
-        if (!config.tileYes()){return;}
 
         Actor npc = event.getActor();
 
@@ -135,6 +124,7 @@ public class ZulrahPlugin extends Plugin {
 
         if (npc.getAnimation() == ZULRAH_EMERGE || npc.getAnimation() == ZULRAH_EMERGE_INITIAL){
             transformationTracker();
+
         }
 
     }
