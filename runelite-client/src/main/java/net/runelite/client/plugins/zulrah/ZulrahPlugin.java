@@ -17,6 +17,8 @@ import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 import net.runelite.api.GameState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static net.runelite.api.NpcID.*;
@@ -65,6 +67,7 @@ public class ZulrahPlugin extends Plugin {
                 nextSafeSpots = new ArrayList<>();
     List<ZulrahPhase> phaseList = new ArrayList<>();
     ZulrahPatterns pattern = null; //undecided pattern
+    List<ZulrahPatterns> possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4);
 
     @Provides
     ZulrahConfig provideConfig(ConfigManager configManager)
@@ -130,6 +133,7 @@ public class ZulrahPlugin extends Plugin {
             phaseCounter = 0;
             phaseList.clear();
             pattern = null;
+            possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4);
         }
 
         if (npc.getAnimation() == ZULRAH_EMERGE || npc.getAnimation() == ZULRAH_EMERGE_INITIAL){
@@ -142,7 +146,6 @@ public class ZulrahPlugin extends Plugin {
         phaseCounter++;
         ZulrahPhase currentPhase = phase.MAGE_SOUTH;
         LocalPoint zulrahLocation;
-        System.out.println("Phase Count: " + phaseCounter);
 
         for (NPC newZulrah : client.getNpcs()){
 
@@ -205,6 +208,8 @@ public class ZulrahPlugin extends Plugin {
         }
         phaseList.add(currentPhase);
         patternDetermination(phaseCounter, phaseList);
+        System.out.println("Phase Count: " + phaseCounter);
+        System.out.println("Possible Patterns: " + possiblePatterns);
     }
 
     private void patternDetermination(int phaseNumber, List<ZulrahPhase>currentPhases){
@@ -218,11 +223,13 @@ public class ZulrahPlugin extends Plugin {
                     //patterns 3 and 4 are solved here
                     if (currentPhases.get(phaseNumber - 1).equals(RANGE_EAST)){
                         pattern = PATTERN_3;
-                        System.out.println("Pattern Decided: 3");
                     } else if (currentPhases.get(phaseNumber - 1).equals(MAGE_EAST)){
                         pattern = PATTERN_4;
-                        System.out.println("Pattern Decided: 4");
+                    } else {
+                        //possiblePatterns.remove(possiblePatterns.indexOf(ZulrahPatterns.PATTERN_3));
+                        //possiblePatterns.remove(possiblePatterns.indexOf(ZulrahPatterns.PATTERN_4));
                     }
+
                     break;
                 case 3:
                     //if phase 2 was red this should be blue
@@ -233,10 +240,11 @@ public class ZulrahPlugin extends Plugin {
                     //All cases should be solved by here
                     if (currentPhases.get(phaseNumber - 1).equals(RANGE_SOUTH)){
                         pattern = PATTERN_1;
-                        System.out.println("Pattern Decided: 1");
+                        //possiblePatterns.remove(possiblePatterns.indexOf(PATTERN_2));
+
                     } else if (currentPhases.get(phaseNumber - 1).equals(RANGE_WEST)){
                         pattern = PATTERN_2;
-                        System.out.println("Pattern Decided: 2");
+                        //possiblePatterns.remove(possiblePatterns.indexOf(PATTERN_1));
                     }
                     break;
                 default:
@@ -249,6 +257,7 @@ public class ZulrahPlugin extends Plugin {
             if (currentPhases.get(phaseNumber - 1).equals(RANGE_CENTER)){
                 phaseCounter = 1;
                 pattern = null;
+                possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4); //reset possible patterns
             }
         }
 
