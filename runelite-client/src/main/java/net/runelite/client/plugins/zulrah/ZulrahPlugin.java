@@ -97,9 +97,9 @@ public class ZulrahPlugin extends Plugin {
         }
         System.out.println("Number of phases: " + phaseCounter);
         System.out.println("Zulrah has despawned!");
-        System.out.println("Phase: " + phase);
+        System.out.println("Pattern: " + pattern);
         for(ZulrahPhase phase : phaseList){
-            System.out.print(phase.getPhaseName());
+            System.out.println(phase.getPhaseName());
 
         }
     }
@@ -112,8 +112,6 @@ public class ZulrahPlugin extends Plugin {
         if (!isZulrah(event.getNpc())){
             return;
         }
-
-        System.out.println("Zulrah has spawned!");
 
         zulrahNpc = event.getNpc();
     }
@@ -136,7 +134,6 @@ public class ZulrahPlugin extends Plugin {
 
         if (npc.getAnimation() == ZULRAH_EMERGE || npc.getAnimation() == ZULRAH_EMERGE_INITIAL){
             transformationTracker();
-            System.out.println("Zulrah has transformed!");
         }
 
     }
