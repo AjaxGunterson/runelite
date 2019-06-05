@@ -16,10 +16,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 import net.runelite.api.GameState;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static net.runelite.api.NpcID.*;
 import static net.runelite.client.plugins.zulrah.ZulrahPatterns.*;
@@ -223,11 +220,19 @@ public class ZulrahPlugin extends Plugin {
                     //patterns 3 and 4 are solved here
                     if (currentPhases.get(phaseNumber - 1).equals(RANGE_EAST)){
                         pattern = PATTERN_3;
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_1), null);
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_2), null);
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_4), null);
                     } else if (currentPhases.get(phaseNumber - 1).equals(MAGE_EAST)){
                         pattern = PATTERN_4;
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_1), null);
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_2), null);
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_3), null);
                     } else {
-                        //possiblePatterns.remove(possiblePatterns.indexOf(ZulrahPatterns.PATTERN_3));
-                        //possiblePatterns.remove(possiblePatterns.indexOf(ZulrahPatterns.PATTERN_4));
+                        //remove pattern 3
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_3), null);
+                        //remove pattern 4
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_4), null);
                     }
 
                     break;
@@ -240,11 +245,13 @@ public class ZulrahPlugin extends Plugin {
                     //All cases should be solved by here
                     if (currentPhases.get(phaseNumber - 1).equals(RANGE_SOUTH)){
                         pattern = PATTERN_1;
-                        //possiblePatterns.remove(possiblePatterns.indexOf(PATTERN_2));
+                        //remove pattern 2
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_2), null);
 
                     } else if (currentPhases.get(phaseNumber - 1).equals(RANGE_WEST)){
                         pattern = PATTERN_2;
-                        //possiblePatterns.remove(possiblePatterns.indexOf(PATTERN_1));
+                        //remove pattern 1
+                        possiblePatterns.set(possiblePatterns.indexOf(PATTERN_1), null);
                     }
                     break;
                 default:
