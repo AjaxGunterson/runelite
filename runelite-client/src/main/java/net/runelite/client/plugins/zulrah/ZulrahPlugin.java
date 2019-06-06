@@ -22,6 +22,7 @@ import static net.runelite.api.NpcID.*;
 import static net.runelite.client.plugins.zulrah.ZulrahPatterns.*;
 import static net.runelite.client.plugins.zulrah.ZulrahPhase.*;
 import static net.runelite.client.plugins.zulrah.ZulrahPosition.*;
+import static net.runelite.client.plugins.zulrah.ZulrahSafespots.PATTERN_1_SAFESPOTS;
 
 @PluginDescriptor(
         name = "Zulrah",
@@ -57,7 +58,7 @@ public class ZulrahPlugin extends Plugin {
 
     int phaseCounter = 0;
     NPC zulrahNpc = null;
-    List<WorldPoint> safeSpots = new ArrayList<>(),
+    List<LocalPoint> safeSpots = new ArrayList<>(),
                 nextSafeSpots = new ArrayList<>();
     List<ZulrahPhase> phaseList = new ArrayList<>();
     ZulrahPatterns pattern = null; //undecided pattern
@@ -116,14 +117,12 @@ public class ZulrahPlugin extends Plugin {
         if (!(npc.getName().equals("Zulrah"))){return;}
 
         if (npc.getAnimation() == ZULRAH_EMERGE_INITIAL){
-            phaseCounter = 0;
-            phaseList.clear();
-            pattern = null;
-            possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4);
+            resetTrackers();
         }
 
         if (npc.getAnimation() == ZULRAH_EMERGE || npc.getAnimation() == ZULRAH_EMERGE_INITIAL){
             transformationTracker();
+            setSafeTiles();
 
         }
 
@@ -197,6 +196,16 @@ public class ZulrahPlugin extends Plugin {
         patternDetermination(phaseCounter, phaseList);
         System.out.println("Phase Count: " + phaseCounter);
         System.out.println("Possible Patterns: " + possiblePatterns);
+    }
+
+    private void setSafeTiles(){
+        if (!(pattern == null)){//pattern is already set
+
+        } else {//pattern is not set
+            //If the pattern is not set figure out what to do
+            ///safeSpots.add(ZulrahSafespots.);
+            System.out.println(safeSpots);//just checking
+        }
     }
 
     private void patternDetermination(int phaseNumber, List<ZulrahPhase>currentPhases){
@@ -285,11 +294,20 @@ public class ZulrahPlugin extends Plugin {
         return false;
     }
 
-    public List<WorldPoint> getSafeSpots(){
+    private void resetTrackers(){
+        phaseCounter = 0;
+        phaseList.clear();
+        pattern = null;
+        possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4);
+        safeSpots.clear();
+        nextSafeSpots.clear();
+    }
+
+    public List<LocalPoint> getSafeSpots(){
         return safeSpots;
     }
 
-    public List<WorldPoint> getNextSafeSpots(){
+    public List<LocalPoint> getNextSafeSpots(){
         return nextSafeSpots;
     }
 
@@ -298,11 +316,7 @@ public class ZulrahPlugin extends Plugin {
     {
         overlayManager.remove(zulrahHighlightOverlay);
         overlayManager.remove(zulrahTileOverlay);
-        phaseCounter = 0;
-        phaseList.clear();
-        safeSpots.clear();
-        nextSafeSpots.clear();
-        pattern = null;
+        resetTrackers();
     }
 
 }
