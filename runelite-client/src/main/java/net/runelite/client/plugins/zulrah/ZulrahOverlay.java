@@ -37,15 +37,15 @@ public class ZulrahOverlay extends Overlay {
         switch (zulrah.getId()){
             case ZULRAH:
                 renderTargetOverlay(graphics, zulrah, Color.green);//highlights hull
-                renderTile(graphics, zulrah.getLocalLocation(), Color.green);//highlights tiles
+                //renderTile(graphics, zulrah.getLocalLocation(), Color.green);//highlights tiles
                 break;
             case ZULRAH_2043:
                 renderTargetOverlay(graphics, zulrah, Color.red);//highlights hull
-                renderTile(graphics, zulrah.getLocalLocation(), Color.red);//highlights tiles
+                //renderTile(graphics, zulrah.getLocalLocation(), Color.red);//highlights tiles
                 break;
             case ZULRAH_2044:
                 renderTargetOverlay(graphics, zulrah, Color.blue);//highlights hull
-                renderTile(graphics, zulrah.getLocalLocation(), Color.blue);//highlights tiles
+                //renderTile(graphics, zulrah.getLocalLocation(), Color.blue);//highlights tiles
                 break;
         }
 
