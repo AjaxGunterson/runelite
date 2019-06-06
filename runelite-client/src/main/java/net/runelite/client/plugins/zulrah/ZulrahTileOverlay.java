@@ -34,30 +34,27 @@ public class ZulrahTileOverlay extends Overlay {
     {
 
         NPC zulrah = plugin.zulrahNpc;
-        List<WorldPoint> safeSpots = plugin.getSafeSpots(),
+        List<LocalPoint> safeSpots = plugin.getSafeSpots(),
                     nextSafeSpots = plugin.getNextSafeSpots();
 
         //if (zulrah == null || safeSpots == null){return null;}
-        if (safeSpots == null){return null;} //just for testing, remove later
+        if (safeSpots == null){return null;}
 
 
-        for (WorldPoint nextSafe : nextSafeSpots){
+        for (LocalPoint nextSafe : nextSafeSpots){
 
-            LocalPoint spotPoint = LocalPoint.fromWorld(client, nextSafe);
             //LocalPoint localLocation = client.getLocalPlayer().getLocalLocation();
 
-            renderTile(graphics, spotPoint, Color.blue);
+            renderTile(graphics, nextSafe, Color.yellow);
 
         }
 
-        for (WorldPoint safe : safeSpots)
+        for (LocalPoint safe : safeSpots)
         {
-            LocalPoint spotPoint = LocalPoint.fromWorld(client, safe);
             //LocalPoint localLocation = client.getLocalPlayer().getLocalLocation();
 
-            renderTile(graphics, spotPoint, Color.green);
+            renderTile(graphics, safe, Color.green);
         }
-
 
 
         return null;
