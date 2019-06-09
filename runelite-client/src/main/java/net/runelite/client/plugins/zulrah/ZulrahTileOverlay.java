@@ -36,6 +36,7 @@ public class ZulrahTileOverlay extends Overlay {
         NPC zulrah = plugin.zulrahNpc;
         List<LocalPoint> safeSpots = plugin.getCurrentSafeSpots(),
                     nextSafeSpots = plugin.getNextSafeSpots();
+        ZulrahPhase nextPhase = plugin.zulrahNextPhase;
 
         if (zulrah == null || safeSpots == null){return null;}
         //if (safeSpots == null){return null;}
@@ -52,6 +53,22 @@ public class ZulrahTileOverlay extends Overlay {
         {
             //LocalPoint localLocation = client.getLocalPlayer().getLocalLocation();
             renderTile(graphics, safe, Color.green);
+        }
+
+        if (nextPhase == null){return null;}
+
+        switch(nextPhase.getNpcId()){
+            case ZULRAH:
+                renderTile(graphics, nextPhase.getPosition().getPosition(), Color.green);
+                break;
+            case ZULRAH_2043:
+                renderTile(graphics, nextPhase.getPosition().getPosition(), Color.red);
+                break;
+            case ZULRAH_2044:
+                renderTile(graphics, nextPhase.getPosition().getPosition(), Color.blue);
+                break;
+            default:
+                break;
         }
 
 
