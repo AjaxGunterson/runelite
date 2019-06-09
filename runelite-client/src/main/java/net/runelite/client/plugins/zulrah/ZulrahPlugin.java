@@ -1,20 +1,18 @@
 package net.runelite.client.plugins.zulrah;
 
 import com.google.inject.Inject;
-import com.google.inject.Provides;
 import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.coords.LocalPoint;
-import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 import net.runelite.api.GameState;
+import net.runelite.api.events.GameStateChanged;
 
 import java.util.*;
 
@@ -30,6 +28,7 @@ import static net.runelite.client.plugins.zulrah.ZulrahSafespots.*;
         tags = {"zulrah", "boss"},
         enabledByDefault = false
 )
+
 
 public class ZulrahPlugin extends Plugin {
 
@@ -55,11 +54,6 @@ public class ZulrahPlugin extends Plugin {
     final int ZULRAH_EMERGE_INITIAL = 5071,
                 ZULRAH_EMERGE = 5073;
 
-    /*List<LocalPoint> pattern_1_safespots = new ArrayList<>();
-    List<LocalPoint> pattern_2_safespots = new ArrayList<>();
-    List<LocalPoint> pattern_3_safespots = new ArrayList<>();
-    List<LocalPoint> pattern_4_safespots = new ArrayList<>();*/
-
 
     int phaseCounter = 0;
     NPC zulrahNpc = null;
@@ -74,17 +68,19 @@ public class ZulrahPlugin extends Plugin {
 
     @Override
     protected void startUp(){
-        overlayManager.add(zulrahHighlightOverlay);
-        overlayManager.add(zulrahTileOverlay);
+        //overlayManager.add(zulrahHighlightOverlay);
+        //overlayManager.add(zulrahTileOverlay);
     }
 
+    @Subscribe
     public void onGameStateChanged(GameStateChanged event)
     {
         switch (event.getGameState())
         {
             case HOPPING:
-            case LOGGING_IN:
-            case LOADING:
+            case LOGGED_IN:
+                overlayManager.remove(zulrahHighlightOverlay);
+                overlayManager.remove(zulrahTileOverlay);
                 break;
         }
     }
@@ -101,6 +97,8 @@ public class ZulrahPlugin extends Plugin {
             System.out.println(phase.getPhaseName());
 
         }
+        overlayManager.remove(zulrahHighlightOverlay);
+        overlayManager.remove(zulrahTileOverlay);
         resetTrackers();
     }
 
@@ -111,6 +109,8 @@ public class ZulrahPlugin extends Plugin {
         if (!isZulrah(event.getNpc())){
             return;
         }
+        overlayManager.add(zulrahHighlightOverlay);
+        overlayManager.add(zulrahTileOverlay);
 
         zulrahNpc = event.getNpc();
     }
@@ -130,8 +130,6 @@ public class ZulrahPlugin extends Plugin {
 
         if (npc.getAnimation() == ZULRAH_EMERGE || npc.getAnimation() == ZULRAH_EMERGE_INITIAL){
             transformationTracker();
-            setSafeTiles();
-
         }
 
     }
@@ -202,16 +200,6 @@ public class ZulrahPlugin extends Plugin {
         }
         phaseList.add(currentPhase);
         patternDetermination(phaseCounter, phaseList);
-        System.out.println("Phase Count: " + phaseCounter);
-        System.out.println("Possible Patterns: " + possiblePatterns);
-    }
-
-    private void setSafeTiles(){
-        if (!(pattern == null)){//pattern is already set
-
-        } else {//pattern is not set
-            //If the pattern is not set figure out what to do
-        }
     }
 
     private void patternDetermination(int phaseNumber, List<ZulrahPhase>currentPhases){
