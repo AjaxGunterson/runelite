@@ -89,13 +89,13 @@ public class ZulrahPlugin extends Plugin {
         if (!isZulrah(event.getNpc())){
             return;
         }
-        System.out.println("Number of phases: " + phaseCounter);
+        /*System.out.println("Number of phases: " + phaseCounter);
         System.out.println("Zulrah has despawned!");
         System.out.println("Pattern: " + pattern);
         for(ZulrahPhase phase : phaseList){
             System.out.println(phase.getPhaseName());
 
-        }
+        }*/
         overlayManager.remove(zulrahHighlightOverlay);
         overlayManager.remove(zulrahTileOverlay);
         resetTrackers();
