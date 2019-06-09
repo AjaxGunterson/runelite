@@ -63,6 +63,7 @@ public class ZulrahPlugin extends Plugin {
 
     int phaseCounter = 0;
     NPC zulrahNpc = null;
+    ZulrahPhase zulrahNextPhase = null;
     List<LocalPoint> safeSpots = new ArrayList<>(),
                 nextSafeSpots = new ArrayList<>();
     List<ZulrahPhase> phaseList = new ArrayList<>();
@@ -241,6 +242,7 @@ public class ZulrahPlugin extends Plugin {
                         possiblePatterns.set(possiblePatterns.indexOf(PATTERN_4), null);
                     }
 
+
                     break;
                 case 3:
                     //if phase 2 was red this should be blue
@@ -266,14 +268,36 @@ public class ZulrahPlugin extends Plugin {
                     break;
         }
 
+        if (pattern != null){
+            switch(pattern){
+                case PATTERN_1:
+                    zulrahNextPhase = PATTERN_1.getPattern().get(phaseCounter);
+                    break;
+                case PATTERN_2:
+                    zulrahNextPhase = PATTERN_2.getPattern().get(phaseCounter);
+                    break;
+                case PATTERN_3:
+                    zulrahNextPhase = PATTERN_3.getPattern().get(phaseCounter);
+                    break;
+                case PATTERN_4:
+                    zulrahNextPhase = PATTERN_4.getPattern().get(phaseCounter);
+                    break;
+                default:
+                    break;
+            }
+        } else if (possiblePatterns.indexOf(PATTERN_1) == 0 & possiblePatterns.indexOf(PATTERN_2) == 1){
+            if (phaseCounter != 1)
+            zulrahNextPhase = PATTERN_1.getPattern().get(phaseCounter);
+        }
+
+        //if both 2 and 3 are still present
+
         if (phaseNumber > 10){
         /*check if current phase is RANGE_CENTER, this will determine
         * if the pattern has been reset to the beginning*/
             if (currentPhases.get(phaseNumber - 1).equals(RANGE_CENTER)){
-                phaseCounter = 1;
-                pattern = null;
-                patternSafespot = PATTERN_1_SAFESPOTS;
-                possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4); //reset possible patterns
+                resetTrackers();
+                phaseCounter++;
             }
         }
 
@@ -295,6 +319,7 @@ public class ZulrahPlugin extends Plugin {
         phaseCounter = 0;
         phaseList.clear();
         pattern = null;
+        zulrahNextPhase = null;
         patternSafespot = PATTERN_1_SAFESPOTS;
         possiblePatterns = Arrays.asList(PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4);
         safeSpots.clear();
