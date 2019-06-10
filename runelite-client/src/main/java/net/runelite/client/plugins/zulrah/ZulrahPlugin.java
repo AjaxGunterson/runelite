@@ -23,7 +23,7 @@ import static net.runelite.client.plugins.zulrah.ZulrahSafespots.*;
 
 @PluginDescriptor(
         name = "Zulrah",
-        description = "This is a test.",
+        description = "Highlights and helpful overlays for learning Zulrah.",
         tags = {"zulrah", "boss"},
         enabledByDefault = false
 )
@@ -69,6 +69,7 @@ public class ZulrahPlugin extends Plugin {
     protected void startUp(){
         //overlayManager.add(zulrahHighlightOverlay);
         //overlayManager.add(zulrahTileOverlay);
+
     }
 
     @Subscribe
